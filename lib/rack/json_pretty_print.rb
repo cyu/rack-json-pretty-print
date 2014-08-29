@@ -1,4 +1,5 @@
-require "rack/json_pretty_print/version"
+require 'rack/utils'
+require 'rack/json_pretty_print/version'
 
 module Rack
   class JSONPrettyPrint
@@ -13,8 +14,11 @@ module Rack
           if qs.split('&').include?('pretty=1')
             json = []
             response[2].each { |str| json << str }
-            response[2].close if response[2].respond_to? :close
-            response[2] = [pretty_json(json.join)]
+            response[2].close if response[2].respond_to?(:close) # Rack::Lock
+
+            json_prettified = pretty_json(json.join)
+            response[1]['Content-Length'] = Rack::Utils.bytesize(json_prettified).to_s
+            response[2] = [json_prettified]
           end
         end
       end
