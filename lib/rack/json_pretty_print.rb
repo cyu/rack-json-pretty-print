@@ -26,16 +26,16 @@ module Rack
     end
 
     def pretty_json(json)
-      if defined? MultiJson
-        hash = MultiJson.load(json)
-        MultiJson.dump(hash, :pretty => true)
-      elsif defined? Yajl
+      if defined? Yajl
         parser = Yajl::Parser.new
         hash = parser.parse(json)
         Yajl::Encoder.encode(hash, :pretty => true)
       elsif defined? JSON
         hash = JSON.parse(json)
         JSON.pretty_generate(hash)
+      elsif defined? MultiJson
+        hash = MultiJson.load(json)
+        MultiJson.dump(hash, :pretty => true)
       else
         json
       end
