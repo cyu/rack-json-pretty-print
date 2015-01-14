@@ -18,7 +18,9 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Add this line to `config/environments/development.rb`
+
+    config.middleware.use Rack::JSONPrettyPrint
 
 ## Contributing
 
